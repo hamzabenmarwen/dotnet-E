@@ -1,38 +1,35 @@
 ﻿@model TP2.Models.ViewModels.HomeViewModel
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Accueil";
 }
-
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/auth-home.css" asp-append-version="true" />
 
 <div class="container mt-5">
-
-    <!-- HERO SECTION -->
-    <div class="text-center mb-5">
+    <!-- SECTION HERO -->
+    <div class="hero-section text-center">
         <h1 class="display-4">Bienvenue sur notre Boutique</h1>
-        <p class="lead text-muted">
+        <p class="lead">
             Explorez nos catégories et découvrez nos derniers produits
         </p>
-        <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg mt-3">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-light btn-lg mt-3">
             Voir tous les produits
         </a>
     </div>
 
-    <!-- CATEGORIES -->
-    <h2 class="mb-3">Catégories</h2>
-    <div class="row">
+    <!-- CATÉGORIES -->
+    <h2 class="section-title">Catégories</h2>
+    <div class="row mb-5">
         @foreach (var c in Model.Categories)
         {
             <div class="col-md-4 mb-4">
-                <div class="card shadow-sm p-3 text-center">
-                    <i class="fas fa-tags fa-3x text-primary mb-3"></i>
+                <div class="category-card">
+                    <i class="fas fa-tags fa-3x"></i>
                     <h4>@c.CategoryName</h4>
-
                     <a asp-controller="Product" asp-action="Index"
                        asp-route-categoryId="@c.CategoryId"
                        class="btn btn-outline-primary mt-3">
-                        Voir produits
+                        Voir les produits
                     </a>
                 </div>
             </div>
@@ -41,42 +38,38 @@
 
     <hr class="my-5" />
 
-    <!-- LAST PRODUCTS -->
-    <h2 class="mb-3">Derniers Produits</h2>
-    <div class="d-flex flex-wrap">
+    <!-- DERNIERS PRODUITS -->
+    <h2 class="section-title">Derniers Produits</h2>
+    <div class="products-grid">
         @foreach (var product in Model.Products)
         {
             var photoPath = "~/images/" + (product.Image ?? "noimage.jpg");
-
-            <div class="card m-3" style="min-width: 18rem; max-width: 30%;">
-                <img src="@photoPath" asp-append-version="true"
-                     style="height: 180px; object-fit: cover;" class="card-img-top" />
-
+            <div class="product-card">
+                <img src="@photoPath" asp-append-version="true" alt="@product.Name" />
                 <div class="card-body">
-                    <h5><b>@product.Name</b></h5>
+                    <h5>@product.Name</h5>
                     <p class="text-muted">@product.Category.CategoryName</p>
-                    <p class="fw-bold">@product.Price DT</p>
-
-                    <a asp-controller="Product" asp-action="Details"
-                       asp-route-id="@product.ProductId"
-                       class="btn btn-primary btn-sm">
-                        Voir
-                    </a>
-
-                    <a asp-controller="Panier" asp-action="AddProduct"
-                       asp-route-id="@product.ProductId"
-                       class="btn btn-outline-secondary btn-sm">
-                        Ajouter au panier
-                    </a>
+                    <div class="price">@product.Price DT</div>
+                    <div class="d-flex gap-2">
+                        <a asp-controller="Product" asp-action="Details"
+                           asp-route-id="@product.ProductId"
+                           class="btn btn-primary flex-grow-1">
+                            <i class="fas fa-eye me-1"></i> Voir
+                        </a>
+                        <a asp-controller="Panier" asp-action="AddProduct"
+                           asp-route-id="@product.ProductId"
+                           class="btn btn-outline-secondary flex-grow-1">
+                            <i class="fas fa-cart-plus me-1"></i> Panier
+                        </a>
+                    </div>
                 </div>
             </div>
         }
     </div>
 
-    <div class="text-center mt-4">
-        <a asp-controller="Product" asp-action="Index" class="btn btn-dark btn-lg">
-            Tous les produits →
+    <div class="text-center mt-5 mb-4">
+        <a asp-controller="Product" asp-action="Index" class="btn-view-all">
+            Tous les produits <i class="fas fa-arrow-right ms-2"></i>
         </a>
     </div>
-
 </div>

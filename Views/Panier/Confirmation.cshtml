@@ -1,22 +1,69 @@
 ﻿@model TP2.Models.Order
-<h1>Votre commande a été validée avec succès !</h1>
-<p>Merci pour votre achat, @Model.CustomerName ! Votre commande a bien été enregistrée.</p>
-<div class="order-details">
-    <h2>Récapitulatif de votre commande</h2>
-    <div class="detail-row">
-        <span class="detail-label">Numéro de commande :</span>
-        <span class="detail-value">@Model.Id</span>
-    </div>
-    <div class="detail-row">
-        <span class="detail-label">Date :</span>
-        <span class="detail-value">@Model.OrderDate.ToString("dd/MM/yyyy à HH:mm")</span>
-    </div>
-    <div class="detail-row">
-        <span class="detail-label">Montant total :</span>
-        <span class="detail-value">@Model.TotalAmount</span>
-    </div>
-    <div class="detail-row">
-        <span class="detail-label">Adresse de livraison :</span>
-        <span class="detail-value"> @Model.Address.</span>
+@{
+    ViewData["Title"] = "Commande confirmée";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/auth-home.css" asp-append-version="true" />
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+
+            <!-- Grande icône de succès -->
+            <div class="mb-5">
+                <i class="fas fa-check-circle fa-8x text-success animate__animated animate__bounceIn"></i>
+            </div>
+
+            <h1 class="display-4 fw-bold text-success mb-3">
+                Merci @Model.CustomerName !
+            </h1>
+            <p class="lead fs-3 text-muted mb-5">
+                Votre commande a été validée avec succès
+            </p>
+
+            <div class="card modern-card shadow-lg mx-auto" style="max-width: 600px;">
+                <div class="card-body p-5">
+                    <h2 class="mb-4">
+                        <i class="fas fa-receipt me-2"></i>Récapitulatif de commande
+                    </h2>
+
+                    <div class="row text-start g-4 fs-5">
+                        <div class="col-12 d-flex justify-content-between border-bottom pb-3">
+                            <span class="text-muted">Numéro de commande</span>
+                            <strong>#@Model.Id</strong>
+                        </div>
+                        <div class="col-12 d-flex justify-content-between border-bottom pb-3">
+                            <span class="text-muted">Date</span>
+                            <strong>@Model.OrderDate.ToString("dd MMMM yyyy à HH:mm")</strong>
+                        </div>
+                        <div class="col-12 d-flex justify-content-between border-bottom pb-3">
+                            <span class="text-muted">Adresse de livraison</span>
+                            <strong>@Model.Address</strong>
+                        </div>
+                        <div class="col-12 d-flex justify-content-between pt-3">
+                            <span class="fs-4 fw-bold">Montant total</span>
+                            <span class="fs-3 fw-bold text-success">@Model.TotalAmount DT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg btn-modern me-3">
+                    <i class="fas fa-shopping-bag me-2"></i>Continuer vos achats
+                </a>
+                <a asp-controller="Account" asp-action="Orders" class="btn btn-outline-success btn-lg btn-modern">
+                    <i class="fas fa-list me-2"></i>Voir mes commandes
+                </a>
+            </div>
+
+            <div class="mt-5 text-muted">
+                <small>
+                    Un email de confirmation a été envoyé à votre adresse.
+                    Merci de votre confiance
+                </small>
+            </div>
+        </div>
     </div>
 </div>

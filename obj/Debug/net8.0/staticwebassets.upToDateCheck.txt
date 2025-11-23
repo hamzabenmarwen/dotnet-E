@@ -1,4 +1,4 @@
-wwwroot\css\site.css
+wwwroot\css\auth-home.css
 wwwroot\favicon.ico
 wwwroot\images\8a7c5070-2981-496c-9fa3-060860fbee20_ball.jpg
 wwwroot\images\8e0943f1-400c-4265-af16-0c786bb458ce_ball.jpg
@@ -45,7 +45,6 @@ wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
-wwwroot\lib\bootstrap\dist\css\bootstrap_mmm.min.css
 wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
 wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
 wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js

@@ -1,42 +1,100 @@
 ﻿@model TP2.Models.Product
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Détails du produit";
 }
 
-<h1>Details</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/auth-home.css" asp-append-version="true" />
 
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QteStock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QteStock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="container mt-4">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
+        <h1 class="section-title">
+            <i class="fas fa-box me-2 text-success"></i>
+            Détails du produit
+        </h1>
+        <p class="text-muted">Toutes les informations sur ce produit</p>
+    </div>
+
+    <div class="card modern-card shadow-sm overflow-hidden">
+        <div class="row g-0">
+            <!-- Image -->
+            <div class="col-lg-5">
+                <img src="~/images/@(Model.Image ?? "noimage.jpg")"
+                     asp-append-version="true"
+                     class="img-fluid rounded-start"
+                     alt="@Model.Name"
+                     style="height: 100%; min-height: 400px; object-fit: cover;">
+            </div>
+
+            <!-- Details -->
+            <div class="col-lg-7">
+                <div class="card-body p-5">
+                    <h2 class="fw-bold display-6 mb-3">@Model.Name</h2>
+
+                    <div class="mb-4">
+                        <span class="fs-1 fw-bold text-success">@Model.Price DT</span>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-cubes text-primary me-3" style="width: 32px;"></i>
+                                <div>
+                                    <strong>Quantité en stock</strong>
+                                    <p class="mb-0 fs-5">
+                                        <span class="badge bg-@(Model.QteStock > 0 ? "success" : "danger") fs-6">
+                                            @Model.QteStock disponible@(Model.QteStock <= 1 ? "" : "s")
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-tag text-info me-3" style="width: 32px;"></i>
+                                <div>
+                                    <strong>Catégorie</strong>
+                                    <p class="mb-0 fs-5">
+                                        <a asp-controller="Category" asp-action="Details" asp-route-id="@Model.CategoryId"
+                                           class="text-decoration-none fw-semibold">
+                                            @Model.Category?.CategoryName
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-barcode text-muted me-3" style="width: 32px;"></i>
+                                <div>
+                                    <strong>ID Produit</strong>
+                                    <p class="mb-0 text-muted">#@Model.ProductId</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex flex-wrap gap-3">
+                        <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-warning btn-modern">
+                            <i class="fas fa-edit me-2"></i>Modifier le produit
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary btn-modern">
+                            <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                        </a>
+                        <a asp-controller="Panier" asp-action="AddProduct" asp-route-id="@Model.ProductId"
+                           class="btn btn-success btn-modern @(Model.QteStock <= 0 ? "disabled" : "")">
+                            <i class="fas fa-cart-plus me-2"></i>Ajouter au panier
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,66 +1,127 @@
 ﻿@model TP2.ViewModels.OrderViewModel
 @{
-ViewData["Title"] = "CheckOut";
+    ViewData["Title"] = "Validation de la commande";
 }
-<h2>Passer la commande</h2>
-<form asp-action="Checkout" method="post">
-@Html.AntiForgeryToken()
-@if (TempData["ErrorMessage"] != null)
-{
-<div class="alert alert-danger">
-@TempData["ErrorMessage"]
-</div>
-}
-@if (TempData["SuccessMessage"] != null)
-{
-<div class="alert alert-success">
-@TempData["SuccessMessage"]
-</div>
-}
-<div class="form-group">
-<label for="Address">Adresse de livraison :</label>
-<input type="text" class="form-control" id="Address" name="Address" value="@Model.Address" required />
-</div>
-<div class="form-group">
-<label for="PaymentMethod">Méthode de paiement :</label>
-<select class="form-control" id="PaymentMethod" name="PaymentMethod">
-<option value="CreditCard">Carte de crédit</option>
-<option value="Paypal">PayPal</option>
-</select>
-</div>
-    <div class="form-group">
-        <label>Montant total :</label>
-        <p class="form-control-plaintext">@Model.TotalAmount</p>
-        <input type="hidden" name="TotalAmount" value="@Model.TotalAmount" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/auth-home.css" asp-append-version="true" />
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="page-header text-center mb-5">
+                <h1 class="section-title">
+                    <i class="fas fa-shopping-cart me-3 text-success"></i>
+                    Finaliser votre commande
+                </h1>
+                <p class="text-muted fs-5">Vérifiez vos articles et complétez vos informations</p>
+            </div>
+
+            <div class="row g-5">
+                <!-- Formulaire de livraison & paiement -->
+                <div class="col-lg-7">
+                    <div class="card modern-card shadow-sm">
+                        <div class="card-body p-5">
+                            <h3 class="mb-4">
+                                <i class="fas fa-truck me-2 text-primary"></i>Informations de livraison
+                            </h3>
+
+                            @if (TempData["ErrorMessage"] != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+                            @if (TempData["SuccessMessage"] != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show">
+                                    <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            }
+
+                            <form asp-action="Checkout" method="post">
+                                @Html.AntiForgeryToken()
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Adresse de livraison
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" name="Address"
+                                           value="@Model.Address" placeholder="Ex: 123 Rue Exemple, Tunis" required />
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">
+                                        <i class="fas fa-credit-card me-2"></i>Méthode de paiement
+                                    </label>
+                                    <select class="form-select form-select-lg" name="PaymentMethod" required>
+                                        <option value="CreditCard" selected>Carte bancaire</option>
+                                        <option value="Paypal">PayPal</option>
+                                        <option value="CashOnDelivery">Paiement à la livraison</option>
+                                    </select>
+                                </div>
+
+                                <!-- Hidden fields -->
+                                <input type="hidden" name="TotalAmount" value="@Model.TotalAmount" />
+                                @for (int i = 0; i < Model.CartItems.Count; i++)
+                                {
+                                    <input type="hidden" name="CartItems[@i].ProductName" value="@Model.CartItems[i].ProductName" />
+                                    <input type="hidden" name="CartItems[@i].Quantity" value="@Model.CartItems[i].Quantity" />
+                                    <input type="hidden" name="CartItems[@i].Price" value="@Model.CartItems[i].Price" />
+                                }
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success btn-lg btn-modern">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        Confirmer et payer @Model.TotalAmount DT
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Récapitulatif du panier -->
+                <div class="col-lg-5">
+                    <div class="card modern-card shadow-sm sticky-top" style="top: 20px;">
+                        <div class="card-body p-5">
+                            <h3 class="mb-4">
+                                <i class="fas fa-receipt me-2 text-info"></i>Récapitulatif (@Model.CartItems.Count article(s))
+                            </h3>
+
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <tbody>
+                                        @foreach (var item in Model.CartItems)
+                                        {
+                                            <tr>
+                                                <td class="fw-semibold">@item.ProductName</td>
+                                                <td class="text-muted text-end">x @item.Quantity</td>
+                                                <td class="text-end fw-bold">@(item.Price* item.Quantity) DT</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="border-top border-2">
+                                            <td colspan="2" class="fs-5 fw-bold">Total</td>
+                                            <td class="fs-4 fw-bold text-success text-end">@Model.TotalAmount DT</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <a asp-controller="Panier" asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                                    <i class="fas fa-arrow-left me-2"></i>Modifier le panier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    @* Champs cachés pour les articles du panier *@
-    @for (int i = 0; i < Model.CartItems.Count; i++)
-    {
-        <input type="hidden" name="CartItems[@i].ProductName" value="@Model.CartItems[i].ProductName" />
-        <input type="hidden" name="CartItems[@i].Quantity" value="@Model.CartItems[i].Quantity" />
-        <input type="hidden" name="CartItems[@i].Price" value="@Model.CartItems[i].Price" />
-    }
-    <button type="submit" class="btn btn-primary">Passer la commande</button>
-</form>
-<h3>Votre panier</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nom du produit</th>
-            <th>Quantité</th>
-            <th>Prix Unitaire</th>
-            <th>Total Ligne</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.CartItems)
-        {
-            <tr>
-                <td>@item.ProductName</td>
-                <td>@item.Quantity</td>
-                <td>@item.Price</td>
-                <td>@(item.Price* item.Quantity)</td>
-            </tr>
-        }
-    </tbody>
-</table>
+</div>

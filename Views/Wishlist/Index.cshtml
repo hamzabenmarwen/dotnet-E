@@ -2,107 +2,92 @@
 @{
     ViewData["Title"] = "Ma Liste de Souhaits";
 }
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/auth-home.css" asp-append-version="true" />
 
-<style>
-    .heart-btn {
-        border: none;
-        background: transparent !important;
-        cursor: pointer;
-        font-size: 1.5rem;
-        width: 30px;
-        height: 30px;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.2s ease;
-    }
+<div class="container mt-4">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
+        <h1 class="section-title">
+            <i class="fas fa-heart me-2 text-danger"></i>Ma Liste de Souhaits
+        </h1>
+        <p class="text-muted">Retrouvez tous vos produits favoris</p>
+    </div>
 
-        .heart-btn:hover {
-            transform: scale(1.2);
-        }
-
-    .empty-wishlist {
-        text-align: center;
-        padding: 60px 20px;
-        color: #6c757d;
-    }
-
-        .empty-wishlist i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: #dee2e6;
-        }
-</style>
-
-<div class="container-fluid mt-4">
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <h1 class="display-4">
-                Ma Liste de Souhaits
-            </h1>
-            <hr />
-            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-primary mb-3">
-                <i class="fas fa-arrow-left"></i> Retour aux produits
-            </a>
-        </div>
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="@Url.Action("Index", "Product")" class="btn btn-outline-primary btn-modern">
+            <i class="fas fa-arrow-left me-2"></i>Retour aux produits
+        </a>
     </div>
 
     @if (!Model.Any())
     {
-        <div class="empty-wishlist">
+        <!-- Empty Wishlist State -->
+        <div class="empty-state">
             <i class="fas fa-heart-broken"></i>
             <h3>Votre liste de souhaits est vide</h3>
-            <p class="lead">Ajoutez des produits à votre liste de souhaits en cliquant sur le cœur</p>
+            <p>Ajoutez des produits à votre liste en cliquant sur le cœur</p>
             <a href="@Url.Action("Index", "Product")" class="btn btn-primary mt-3">
-                <i class="fas fa-shopping-bag"></i> Parcourir les produits
+                <i class="fas fa-shopping-bag me-2"></i>Découvrir les produits
             </a>
         </div>
     }
     else
     {
-        <div class="card-group">
+        <!-- Wishlist Count -->
+        <div class="wishlist-count mb-4">
+            <span class="badge bg-danger">
+                <i class="fas fa-heart me-2"></i>@Model.Count() produit(s) dans votre liste
+            </span>
+        </div>
+
+        <!-- Wishlist Products Grid -->
+        <div class="products-grid">
             @foreach (var product in Model)
             {
                 var photoPath = "~/images/" + (product.Image ?? "noimage.jpg");
 
-                <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div style="flex: 1;">
-                                <h5><b>Nom : </b> @product.Name</h5>
-                                <h5><b>Prix : </b>@product.Price DT</h5>
-                                <h5><b>Quantité : </b> @product.QteStock</h5>
-                                <h5><b>Catégorie : </b>@product.Category?.CategoryName</h5>
-                            </div>
-                            <!-- Heart Button - Always active in wishlist view -->
-                            <button class="btn btn-link p-0 heart-btn active"
-                                    data-product-id="@product.ProductId"
-                                    onclick="toggleWishlist(this)">
-                                <i class="fas fa-heart text-danger" style="font-size: 1.5rem;"></i>
-                            </button>
+                <div class="product-card wishlist-product-card" data-product-id="@product.ProductId">
+                    <!-- Remove from Wishlist Button -->
+                    <button class="wishlist-btn-card active"
+                            data-product-id="@product.ProductId"
+                            onclick="toggleWishlist(this)">
+                        <i class="fas fa-heart"></i>
+                    </button>
+
+                    <!-- Product Image -->
+                    <img src="@photoPath" asp-append-version="true" alt="@product.Name" />
+
+                    <!-- Product Details -->
+                    <div class="card-body">
+                        <h5>@product.Name</h5>
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-tag me-1"></i>@product.Category?.CategoryName
+                        </p>
+
+                        <div class="product-info mb-3">
+                            <span class="badge bg-info">
+                                <i class="fas fa-boxes me-1"></i>Stock: @product.QteStock
+                            </span>
                         </div>
-                    </div>
 
-                    <img class="card-img-top imageThumbnail" src="@photoPath" asp-append-version="true"
-                         style="height: 200px; object-fit: cover;" />
+                        <div class="price mb-3">@product.Price DT</div>
 
-                    <div class="card-footer text-center">
-                        <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductId"
-                           class="btn btn-primary m-1">View</a>
-                        <a asp-controller="Panier" asp-action="AddProduct" class="btn btn-outline-secondary"
-                           asp-route-id="@product.ProductId">Ajouter Au Panier</a>
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2">
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductId"
+                               class="btn btn-primary flex-grow-1">
+                                <i class="fas fa-eye me-1"></i>Voir
+                            </a>
+                            <a asp-controller="Panier" asp-action="AddProduct" asp-route-id="@product.ProductId"
+                               class="btn btn-outline-secondary flex-grow-1">
+                                <i class="fas fa-cart-plus me-1"></i>Panier
+                            </a>
+                        </div>
                     </div>
                 </div>
             }
-        </div>
-
-        <div class="mt-4 text-center">
-            <p class="text-muted">
-                <i class="fas fa-info-circle"></i>
-                Vous avez @Model.Count() produit(s) dans votre liste de souhaits
-            </p>
         </div>
     }
 </div>
@@ -111,17 +96,21 @@
     <script>
         function toggleWishlist(button) {
             const productId = button.getAttribute('data-product-id');
-            const heartIcon = button.querySelector('.fa-heart');
-            const card = button.closest('.card');
+            const card = button.closest('.wishlist-product-card');
 
             console.log('Removing from wishlist:', productId);
 
-            // Send AJAX request to server
+            // Confirmation before removing
+            if (!confirm('Voulez-vous retirer ce produit de votre liste de souhaits ?')) {
+                return;
+            }
+
+            // Send AJAX request
             fetch('/Wishlist/ToggleWishlist', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({ productId: parseInt(productId) })
             })
@@ -133,18 +122,25 @@
             })
             .then(data => {
                 if (data.success) {
-                    // Remove the card from view with animation
+                    // Animate card removal
                     card.style.opacity = '0';
-                    card.style.transition = 'opacity 0.3s ease';
+                    card.style.transform = 'scale(0.8)';
+                    card.style.transition = 'all 0.3s ease';
 
                     setTimeout(() => {
                         card.remove();
 
                         // Check if wishlist is now empty
-                        const remainingCards = document.querySelectorAll('.card');
+                        const remainingCards = document.querySelectorAll('.wishlist-product-card');
                         if (remainingCards.length === 0) {
-                            // Reload page to show empty state
                             location.reload();
+                        } else {
+                            // Update count
+                            const countBadge = document.querySelector('.wishlist-count .badge');
+                            if (countBadge) {
+                                const newCount = remainingCards.length;
+                                countBadge.innerHTML = `<i class="fas fa-heart me-2"></i>${newCount} produit(s) dans votre liste`;
+                            }
                         }
                     }, 300);
                 } else {
