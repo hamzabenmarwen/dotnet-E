@@ -1,0 +1,82 @@
+﻿@model TP2.Models.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container mt-5">
+
+    <!-- HERO SECTION -->
+    <div class="text-center mb-5">
+        <h1 class="display-4">Bienvenue sur notre Boutique</h1>
+        <p class="lead text-muted">
+            Explorez nos catégories et découvrez nos derniers produits
+        </p>
+        <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg mt-3">
+            Voir tous les produits
+        </a>
+    </div>
+
+    <!-- CATEGORIES -->
+    <h2 class="mb-3">Catégories</h2>
+    <div class="row">
+        @foreach (var c in Model.Categories)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm p-3 text-center">
+                    <i class="fas fa-tags fa-3x text-primary mb-3"></i>
+                    <h4>@c.CategoryName</h4>
+
+                    <a asp-controller="Product" asp-action="Index"
+                       asp-route-categoryId="@c.CategoryId"
+                       class="btn btn-outline-primary mt-3">
+                        Voir produits
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <hr class="my-5" />
+
+    <!-- LAST PRODUCTS -->
+    <h2 class="mb-3">Derniers Produits</h2>
+    <div class="d-flex flex-wrap">
+        @foreach (var product in Model.Products)
+        {
+            var photoPath = "~/images/" + (product.Image ?? "noimage.jpg");
+
+            <div class="card m-3" style="min-width: 18rem; max-width: 30%;">
+                <img src="@photoPath" asp-append-version="true"
+                     style="height: 180px; object-fit: cover;" class="card-img-top" />
+
+                <div class="card-body">
+                    <h5><b>@product.Name</b></h5>
+                    <p class="text-muted">@product.Category.CategoryName</p>
+                    <p class="fw-bold">@product.Price DT</p>
+
+                    <a asp-controller="Product" asp-action="Details"
+                       asp-route-id="@product.ProductId"
+                       class="btn btn-primary btn-sm">
+                        Voir
+                    </a>
+
+                    <a asp-controller="Panier" asp-action="AddProduct"
+                       asp-route-id="@product.ProductId"
+                       class="btn btn-outline-secondary btn-sm">
+                        Ajouter au panier
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-dark btn-lg">
+            Tous les produits →
+        </a>
+    </div>
+
+</div>

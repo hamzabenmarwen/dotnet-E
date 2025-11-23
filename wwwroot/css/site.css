@@ -1,0 +1,212 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.card-img-top {
+    width: 100%;
+    height: 200px; /* Vous pouvez ajuster la hauteur selon votre préférence */
+    object-fit: contain; /* Coupe et ajuste l'image pour éviter la distorsion */
+    border-radius: 5px; /* Coins arrondis pour un meilleur rendu */
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border: 1px solid white;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* Wishlist Badge */
+.wishlist-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border: 2px solid white;
+}
+
+/* Notification styling */
+.alert.position-fixed {
+    min-width: 300px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: none;
+    border-radius: 8px;
+}
+
+/* Wishlist button improvements */
+.wishlist-toggle {
+    position: relative;
+    overflow: hidden;
+}
+
+    .wishlist-toggle .fas {
+        color: #e74c3c;
+        display: none;
+    }
+
+    .wishlist-toggle .far {
+        color: #6c757d;
+    }
+
+    .wishlist-toggle.active .far {
+        display: none;
+    }
+
+    .wishlist-toggle.active .fas {
+        display: inline-block;
+    }
+
+    .wishlist-toggle:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s ease;
+    }
+
+/* Enhanced Wishlist Styles */
+.wishlist-toggle {
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+    .wishlist-toggle .fas {
+        color: #e74c3c;
+        display: none;
+    }
+
+    .wishlist-toggle .far {
+        color: #6c757d;
+        transition: all 0.3s ease;
+    }
+
+    .wishlist-toggle.active .far {
+        display: none;
+    }
+
+    .wishlist-toggle.active .fas {
+        display: inline-block;
+        color: #e74c3c;
+    }
+
+    /* Heart pulse animation */
+    .wishlist-toggle.pulse .fas {
+        animation: heartPulse 0.6s ease;
+    }
+
+@keyframes heartPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Hover effects */
+.wishlist-toggle:hover {
+    background-color: #fff3cd !important;
+    border-color: #ffc107 !important;
+}
+
+    .wishlist-toggle:hover .far {
+        color: #e74c3c;
+    }
+
+.wishlist-toggle.active:hover .fas {
+    color: #c0392b;
+}
+
+/* Enhanced notifications */
+.custom-notification {
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: none;
+    border-radius: 10px;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-left-color: #28a745 !important;
+}
+
+.alert-info {
+    border-left-color: #17a2b8 !important;
+}
+
+.heart-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+    .heart-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .heart-btn .fa-heart {
+        transition: color 0.3s ease;
+    }
+
+/* Optional: Add animation for heart */
+@keyframes heartBeat {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.heart-btn.active .fa-heart {
+    animation: heartBeat 0.6s ease;
+}

@@ -1,0 +1,628 @@
+﻿@model TP2.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* ========================================
+       DASHBOARD ADMIN - CSS AMÉLIORÉ
+       ======================================== */
+
+    /* === GENERAL === */
+    body {
+        background: #f4f6f9 !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* === CARDS === */
+    .dashboard-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        .dashboard-card .card-body {
+            padding: 28px;
+        }
+
+    /* === CARD ICONS === */
+    .card-icon {
+        font-size: 3.5rem;
+        opacity: 0.25;
+    }
+
+    /* === STATISTICS === */
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 10px 0 4px 0;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin: 0;
+        opacity: 0.95;
+    }
+
+    /* === COLORED CARDS WITH GRADIENTS === */
+    .dashboard-card.bg-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    }
+
+    .dashboard-card.bg-success {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+    }
+
+    .dashboard-card.bg-warning {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important;
+        color: #2c3e50 !important;
+    }
+
+        .dashboard-card.bg-warning .stat-label,
+        .dashboard-card.bg-warning .stat-number,
+        .dashboard-card.bg-warning .card-icon {
+            color: #2c3e50 !important;
+        }
+
+    .dashboard-card.bg-info {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+    }
+
+    .dashboard-card.bg-secondary {
+        background: linear-gradient(135deg, #a8caba 0%, #5d4e6d 100%) !important;
+        color: white !important;
+    }
+
+        .dashboard-card.bg-secondary .stat-label,
+        .dashboard-card.bg-secondary .stat-number,
+        .dashboard-card.bg-secondary .card-icon {
+            color: white !important;
+        }
+
+    .dashboard-card.bg-danger {
+        background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%) !important;
+        color: #2c3e50 !important;
+    }
+
+        .dashboard-card.bg-danger .stat-label,
+        .dashboard-card.bg-danger .stat-number,
+        .dashboard-card.bg-danger .card-icon {
+            color: #2c3e50 !important;
+        }
+
+    .dashboard-card.bg-dark {
+        background: linear-gradient(135deg, #232526 0%, #414345 100%) !important;
+    }
+
+    /* === DASHBOARD HEADER === */
+    .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 45px 0;
+        margin-bottom: 35px;
+        border-radius: 0 0 24px 24px;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    }
+
+        .dashboard-header h1 {
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2.8rem;
+        }
+
+        .dashboard-header .lead {
+            opacity: 0.95;
+            font-size: 1.15rem;
+        }
+
+        .dashboard-header i {
+            margin-right: 12px;
+        }
+
+    /* === ADMIN NAVIGATION === */
+    .admin-nav {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        margin-bottom: 28px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+
+        .admin-nav h5 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+            .admin-nav h5 i {
+                margin-right: 10px;
+                color: #667eea;
+            }
+
+        .admin-nav .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+            .admin-nav .btn-group .btn {
+                border-radius: 10px;
+                padding: 12px 24px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                border: 2px solid;
+            }
+
+        .admin-nav .btn-outline-primary {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+            .admin-nav .btn-outline-primary:hover {
+                background: #667eea;
+                border-color: #667eea;
+                color: white;
+                transform: translateY(-3px);
+                box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+            }
+
+        .admin-nav .btn-outline-info {
+            border-color: #4facfe;
+            color: #4facfe;
+        }
+
+            .admin-nav .btn-outline-info:hover {
+                background: #4facfe;
+                border-color: #4facfe;
+                color: white;
+                transform: translateY(-3px);
+                box-shadow: 0 6px 16px rgba(79, 172, 254, 0.3);
+            }
+
+    /* === CHART CONTAINERS === */
+    .chart-container {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        margin-bottom: 28px;
+    }
+
+        .chart-container h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+            .chart-container h4 i {
+                margin-right: 10px;
+            }
+
+    /* === TABLES === */
+    .table-responsive {
+        margin-top: 16px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table thead th {
+            font-weight: 700;
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+            padding: 16px 12px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            background: #f8f9fa;
+        }
+
+        .table tbody td {
+            padding: 16px 12px;
+            vertical-align: middle;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+    .table-hover tbody tr {
+        transition: all 0.2s ease;
+    }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f3f5;
+            cursor: pointer;
+        }
+
+    /* === CUSTOM ICONS COLOR === */
+    .text-primary {
+        color: #667eea !important;
+    }
+
+    .text-success {
+        color: #11998e !important;
+    }
+
+    .text-warning {
+        color: #fa709a !important;
+    }
+
+    .text-info {
+        color: #4facfe !important;
+    }
+
+    /* === CUSTOM SCROLLBAR === */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 5px;
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+    /* === CHART IMPROVEMENTS === */
+    canvas {
+        max-height: 320px !important;
+    }
+
+    /* === BUTTON HOVER EFFECTS === */
+    .btn {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+    /* === UTILITY === */
+    .container-fluid {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    /* === HOVER EFFECTS ON STATS === */
+    .dashboard-card .stat-number {
+        transition: transform 0.3s ease;
+    }
+
+    .dashboard-card:hover .stat-number {
+        transform: scale(1.05);
+    }
+
+    .dashboard-card:hover .card-icon {
+        opacity: 0.35;
+        transform: rotate(5deg);
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="dashboard-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="display-4"><i class="fas fa-tachometer-alt"></i> Tableau de Bord Admin</h1>
+                <p class="lead">Gestion complète de votre boutique en ligne</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <!-- Admin Navigation -->
+    <div class="admin-nav">
+        <div class="row">
+            <div class="col-md-12">
+                <h5><i class="fas fa-cogs"></i> Outils d'Administration</h5>
+                <div class="btn-group" role="group">
+                    <a href="@Url.Action("ListRoles", "Admin")" class="btn btn-outline-primary">
+                        <i class="fas fa-users-cog"></i> Gestion des Rôles
+                    </a>
+                    <a href="@Url.Action("CreateRole", "Admin")" class="btn btn-outline-info">
+                        <i class="fas fa-plus-circle"></i> Nouveau Rôle
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="stat-label">PRODUITS TOTAL</p>
+                            <h2 class="stat-number">@Model.TotalProducts</h2>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="stat-label">REVENU TOTAL</p>
+                            <h2 class="stat-number">@Model.TotalRevenue.ToString("C")</h2>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="stat-label">UTILISATEURS</p>
+                            <h2 class="stat-number">@Model.TotalUsers</h2>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="stat-label">COMMANDES</p>
+                            <h2 class="stat-number">@Model.TotalOrders</h2>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row Stats -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-secondary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="stat-label">REVENU MENSUEL</p>
+                            <h2 class="stat-number">@Model.MonthlyRevenue.ToString("C")</h2>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="stat-label">STOCK FAIBLE</p>
+                            <h2 class="stat-number">@Model.LowStockProducts</h2>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-dark text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="stat-label">RUPTURE STOCK</p>
+                            <h2 class="stat-number">@Model.OutOfStockProducts</h2>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card dashboard-card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="stat-label">PANIER MOYEN</p>
+                            <h2 class="stat-number">@Model.AverageOrderValue.ToString("C")</h2>
+                        </div>
+                        <div class="card-icon">
+                            <i class="fas fa-shopping-basket"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row">
+        <!-- Sales Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="chart-container">
+                <h4><i class="fas fa-chart-bar text-primary"></i> Ventes des 7 derniers jours</h4>
+                <canvas id="salesChart" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- Category Distribution -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="chart-container">
+                <h4><i class="fas fa-chart-pie text-success"></i> Distribution par Catégorie</h4>
+                <canvas id="categoryChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Third Row -->
+    <div class="row">
+        <!-- Top Products -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="chart-container">
+                <h4><i class="fas fa-star text-warning"></i> Produits Populaires</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Produit</th>
+                                <th>Ventes</th>
+                                <th>Revenu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model.TopProducts)
+                            {
+                                <tr>
+                                    <td>@product.Name</td>
+                                    <td>@product.Sales</td>
+                                    <td>@product.Revenue.ToString("C")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Roles Distribution -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="chart-container">
+                <h4><i class="fas fa-users text-info"></i> Distribution des Rôles</h4>
+                <canvas id="rolesChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Sales Chart
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: [@Html.Raw(string.Join(", ", Model.SalesData.Select(s => $"'{s.Date:MMM dd}'")))],
+                datasets: [{
+                    label: 'Ventes (DT)',
+                    data: [@string.Join(", ", Model.SalesData.Select(s => s.Amount))],
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                }
+            }
+        });
+
+        // Category Distribution Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        const categoryChart = new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [@Html.Raw(string.Join(", ", Model.CategoryDistribution.Select(c => $"'{c.CategoryName}'")))],
+                datasets: [{
+                    data: [@string.Join(", ", Model.CategoryDistribution.Select(c => c.ProductCount))],
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                        '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // User Roles Chart
+        const rolesCtx = document.getElementById('rolesChart').getContext('2d');
+        const rolesChart = new Chart(rolesCtx, {
+            type: 'bar',
+            data: {
+                labels: [@Html.Raw(string.Join(", ", Model.UserRoles.Keys.Select(k => $"'{k}'")))],
+                datasets: [{
+                    label: 'Nombre d\\'utilisateurs',
+                    data: [@string.Join(", ", Model.UserRoles.Values)],
+                    backgroundColor: '#17a2b8',
+                    borderWidth: 0,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+}

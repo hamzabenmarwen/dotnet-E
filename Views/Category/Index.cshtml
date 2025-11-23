@@ -1,0 +1,84 @@
+﻿@model IEnumerable<TP2.Models.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<!-- CSS Animations -->
+<style>
+
+    .fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .slide-in {
+        animation: slideIn 0.6s ease-out forwards;
+    }
+
+    .table-container {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 18px rgba(0,0,0,0.08);
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    table tbody tr:hover {
+        background: #f4f7ff;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    a.action-link {
+        margin-right: 10px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        a.action-link:hover {
+            opacity: 0.8;
+        }
+</style>
+
+<h1 class="fade-in my-3">Categories</h1>
+
+<p class="fade-in">
+    <a asp-action="Create" class="btn btn-primary rounded-pill px-4">
+        ➕ Create New Category
+    </a>
+</p>
+
+<div class="table-container slide-in">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CategoryName)</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+
+                    <td class="text-end">
+
+                        <a asp-action="Edit" asp-route-id="@item.CategoryId" class="action-link text-warning">
+                            ✏️ Edit
+                        </a>
+
+                        <a asp-action="Details" asp-route-id="@item.CategoryId" class="action-link text-info">
+                            🔍 Details
+                        </a>
+
+                        <a asp-action="Delete" asp-route-id="@item.CategoryId" class="action-link text-danger">
+                            🗑 Delete
+                        </a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
